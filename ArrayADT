@@ -1,0 +1,172 @@
+#include<iostream>
+using namespace std;
+class ArrayADT
+{
+private:
+		int capacity;
+		int lastindex;
+		int *ptr;
+	public:
+		ArrayADT()
+		{
+			capacity=0;
+			lastindex=-1;
+			ptr=NULL;
+		} 
+		void Createarray(int capacity);
+		int Getitem(int index);
+		void Setitem(int index,int value);
+		void Edititem(int index,int value);
+		int Countitems();
+		void Removeitems(int index);
+		int Searchitem(int value);
+		void Sortarray();
+		friend ostream& operator<<(ostream&,ArrayADT);
+		~ArrayADT()
+		{
+			delete[] ptr;
+		}
+		ArrayADT(ArrayADT &list)
+		{
+			capacity=list.capacity;
+			lastindex=list.lastindex;
+			ptr=new int[capacity];
+			for(int i=0;i<=list.lastindex;i++)
+				ptr[i]=list.ptr[i];
+		}
+};
+ostream& operator<<(ostream &dout,ArrayADT l)
+{
+	int lastindex;
+	if(l.lastindex==-1)
+		cout<<"\n List is empty";
+	for(int i=0;i<l.Countitems();i++)
+		cout<<" "<<l.Getitem(i);
+	return(dout);
+}
+void ArrayADT::Sortarray()
+{
+	int r,i,t;
+	for (r=1;r<Countitems();r++)
+	{
+		for(i=0;i<Countitems()-r;i++)
+			if(ptr[i]>ptr[i+1])
+			{
+				t=ptr[i];
+				ptr[i]=ptr[i+1];
+				ptr[i+1]=t;
+			}
+	}
+	
+}
+int ArrayADT::Searchitem(int value)
+{
+	if(lastindex==-1)
+	{
+		cout<<"\n List is empty";
+		return(-1);
+	}
+	int i;
+	for(i=0;i<=lastindex;i++)
+	{
+		if(ptr[i]==value)
+			return(i);
+	}
+	return(-1);
+		
+}
+void ArrayADT::Removeitems(int index)
+{
+	int i;
+	if(index<0 || index>lastindex)
+		cout<<"\n Either invalid or underflow";
+	else if(index<lastindex)
+	{
+		i=index;
+		while(i!=lastindex)
+		{
+			ptr[i]=ptr[i+1];
+			i++;
+		}
+		lastindex--;
+	}
+	else if(index==lastindex)
+		lastindex--;
+}
+int ArrayADT::Countitems()
+{
+	return(lastindex+1);
+}
+void ArrayADT::Edititem(int index,int value)
+{
+	if(index<0 || index>lastindex)
+		cout<<"\n Invalid index";
+	else
+		ptr[index]=value;
+		
+}
+void ArrayADT::Setitem(int index,int value)
+{
+	int i;
+	if(lastindex==capacity-1)
+		cout<<"\n Overflow";
+	else if(lastindex>capacity-1 || index<0)
+		cout<<"\n Invalid index";
+	else if(index>lastindex+1)
+		cout<<"\n Invalid index";
+	else if(index<=lastindex)
+	{
+		lastindex++;
+		i=lastindex;
+		while(i!=index)
+		{
+			ptr[i]=ptr[i-1];
+			i--;
+		}
+		ptr[index]=value;
+	}
+	else if(index==lastindex+1)
+	{
+		lastindex++;
+		ptr[index]=value;
+	}
+}
+int ArrayADT::Getitem(int index)
+{
+	if(lastindex==-1)
+	{
+		cout<<"\n List is empty";
+		return(-1);
+	}
+	if(index>lastindex || index<0)
+	{
+		cout<<"\n Invalid index";
+		return(-1);
+	}
+	return(ptr[index]);
+}
+void ArrayADT::Createarray(int capacity)
+{
+	this->capacity=capacity;
+	lastindex=-1;
+	ptr=new int[capacity];
+}
+	
+int main()
+{
+	ArrayADT l1;
+	l1.Createarray(5);
+	l1.Setitem(0,20);
+	l1.Setitem(1,10);
+	l1.Setitem(2,30);
+	l1.Setitem(3,40);
+	l1.Setitem(4,50);
+	l1.Getitem(2);
+	//l1.Edititem(1,11);
+	l1.Countitems();
+	//l1.Removeitems(3);
+	l1.Searchitem(40);
+	l1.Sortarray();                  
+	cout<<l1;
+	return 0;
+}
